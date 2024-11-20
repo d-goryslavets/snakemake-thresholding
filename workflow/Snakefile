@@ -1,0 +1,42 @@
+import os
+from os.path import join
+
+
+IMAGES = ['/home/sysbio/snakemake-thresholding/data/ngff_example/my_image']
+LOGDIR = 'log-test'
+
+
+# config['label_name'] = 'test_label'
+
+def check_make(directory):
+    os.makedirs(directory, exist_ok=True)
+
+rule main:
+    input:
+        # '/home/sysbio/snakemake-thresholding/data/ngff_example/my_image/labels/test_label'
+        expand('{sample}/labels/test_label', sample=IMAGES)
+    # params:
+    #     label_name = config['label_name']
+
+
+
+rule threshold:
+    input:
+        zarr_img = '{sample}'
+    output:
+        label_image = directory('{sample}/labels/test_label')
+    conda:
+        'snakemake-threshold'
+    params:
+        label_name = config['label_name']
+    shell:
+        """
+        python ../bin/thresholding_label_task.py thresholding_label_task \
+        --zarr_url {input.zarr_img} \
+        --threshold 500 \
+        --channel '{{"label": "DAPI"}}' \
+        --min_size 50 \
+        --overwrite True \
+        --label_name test_label
+        """
+
