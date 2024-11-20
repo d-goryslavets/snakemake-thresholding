@@ -1,1 +1,4 @@
-label_name: test_label_config
+label_name: snakemake_config_label
+threshold: 500
+min_size: 50
+overwrite: True
