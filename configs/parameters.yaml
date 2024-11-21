@@ -1,4 +1,5 @@
-label_name: snakemake_config_label
+imgs: ['/home/sysbio/snakemake-thresholding/data/ngff_example/my_image']
+label_name: TEST_PLUGIN_THRES
 threshold: 500
 min_size: 50
 overwrite: True

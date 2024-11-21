@@ -1,9 +1,18 @@
 import os
-from os.path import join
+from os.path import join, dirname, abspath
 
 
-IMAGES = ['/home/sysbio/snakemake-thresholding/data/ngff_example/my_image']
+# IMAGES = ['/home/sysbio/snakemake-thresholding/data/ngff_example/my_image']
+IMAGES = config['imgs']
 LOGDIR = 'log-test'
+
+# bin_dir = join(dirname(abspath(__file__)), 'bin')
+# print(bin_dir)
+
+print(workflow.basedir)
+
+bin_dir = join(dirname(workflow.basedir), 'bin')
+print(bin_dir)
 
 
 def check_make(directory):
@@ -28,7 +37,7 @@ rule threshold:
         overwrite = config['overwrite']
     shell:
         """
-        python ../bin/thresholding_label_task.py thresholding_label_task \
+        python {bin_dir}/thresholding_label_task.py thresholding_label_task \
         --zarr_url {input.zarr_img} \
         --threshold {params.threshold} \
         --channel '{{"label": "DAPI"}}' \
