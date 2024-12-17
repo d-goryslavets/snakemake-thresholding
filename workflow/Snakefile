@@ -1,28 +1,26 @@
 import os
 from os.path import join, dirname, abspath
 
+IMAGES = config['imgs'] # image list specified through the parameters.yaml config file
+LOGDIR = 'log-test' # directory with logs
 
-# IMAGES = ['/home/sysbio/snakemake-thresholding/data/ngff_example/my_image']
-IMAGES = config['imgs']
-LOGDIR = 'log-test'
+print(workflow.basedir) # the directory where the Snakefile is located
 
-# bin_dir = join(dirname(abspath(__file__)), 'bin')
-# print(bin_dir)
-
-print(workflow.basedir)
-
-bin_dir = join(dirname(workflow.basedir), 'bin')
+bin_dir = join(dirname(workflow.basedir), 'bin') # directory with executables
 print(bin_dir)
 
 
 def check_make(directory):
     os.makedirs(directory, exist_ok=True)
 
+
+# the `main` rule requires the label layer to be created
+# this invokes the execution of the thresholding rule which runs the fractal module
 rule main:
     input:
         expand('{sample}/labels/{labname}', sample=IMAGES, labname=config['label_name'])
 
-
+# the `threshold` rule accepts a zarr image and adds a new layer with the thresholded channels
 rule threshold:
     input:
         zarr_img = '{sample}'

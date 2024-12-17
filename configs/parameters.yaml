@@ -1,5 +1,5 @@
 imgs: ['/home/sysbio/snakemake-thresholding/data/ngff_example/my_image']
-label_name: TEST_PLUGIN_THRES
+label_name: thresholded_layer
 threshold: 500
 min_size: 50
 overwrite: True
